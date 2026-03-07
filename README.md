@@ -178,7 +178,57 @@ platformio run -e esp32_s3_n16r8
 platformio run -e esp32_s3_n16r8 -t upload
 ```
 
-### 3) Stream IoT_clean dataset
+### 3) Run all models (ESP32-P4-NANO via built-in USB)
+
+```bash
+# P4-NANO with built-in CH343P (Type-C port)
+# Use /dev/cu.usbserial-0001 on macOS
+python3 run_all_models.py --models ALL --transport bitpack \
+  -p /dev/cu.usbserial-0001 -b 921600 \
+  --dataset UKMNCT_IIoT_FDIA --runs 1 \
+  --window 1024 --batch-records 1024 \
+  --unsafe-no-data-checksum --skip-flash \
+  --board-profile esp32-p4_nano --js-power --no-hw-reset
+```
+
+**Flag explanations:**
+| Flag | Meaning |
+|------|---------|
+| `--models ALL` | Run all models (EFDT, HOEFFDING, HAT, SGT, BNN, TM_SPARSE, TM_VANILLA, TM_BO) |
+| `--transport bitpack` | Use bit-packed binary transport |
+| `-p /dev/cu.usbserial-0001` | Serial port (built-in USB on P4-NANO) |
+| `-b 921600` | Baud rate |
+| `--dataset UKMNCT_IIoT_FDIA` | Dataset name (loads from `data/UKMNCT_IIoT_FDIA.csv`) |
+| `--runs 1` | Number of experiment runs |
+| `--window 1024` | Flow-control window size |
+| `--batch-records 1024` | Records per data frame |
+| `--unsafe-no-data-checksum` | Skip checksums for throughput |
+| `--skip-flash` | Do not flash firmware (device already programmed) |
+| `--board-profile esp32-p4_nano` | Board preset (baud, window, pio env) |
+| `--js-power` | Joulescope power/energy measurement |
+| `--no-hw-reset` | No DTR/RTS reset; use software reset only |
+
+### 4) ESP32-C3-Mini
+
+```bash
+python3 run_all_models.py --models ALL --transport bitpack \
+  -p /dev/cu.usbmodem1401 -b 921600 \
+  --dataset UKMNCT_IIoT_FDIA --runs 1 \
+  --window 256 --batch-records 256 \
+  --unsafe-no-data-checksum --board-profile esp32_c3_mini --js-power
+```
+
+### 5) ESP32-S3-N16R8
+
+```bash
+python3 run_all_models.py --models ALL --transport bitpack \
+  -p /dev/cu.usbmodem* -b 921600 \
+  --dataset UKMNCT_IIoT_FDIA --runs 1 \
+  --window 1024 --batch-records 1024 \
+  --unsafe-no-data-checksum --board-profile esp32_s3_n16r8 --js-power
+```
+
+### 6) Single model (test_serial.py)
 
 ```bash
 python3 test_serial.py \
