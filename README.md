@@ -10,30 +10,87 @@ The board receives samples over serial, learns in streaming mode, and then repor
 - Uses ESP32-S3 as an online learning device.
 - Streams data from PC to ESP32 in binary frames.
 - Trains and tests on-device in one continuous pipeline.
-- Supports 4 stream-learning tree models:
+- Supports 3 stream-learning tree models plus Tsetlin Machine and BNN:
   - Hoeffding Tree
   - HAT (Hoeffding Adaptive Tree)
   - EFDT (Extremely Fast Decision Tree)
-  - SGT (Streaming Gradient Tree)
+  - TM_BO / TM_SPARSE (Tsetlin Machine — same implementation)
+  - TM_VANILLA (Tsetlin Machine)
+  - BNN (Binary Neural Network)
 
 ---
 
-## Latest results (from `results/` folder)
+## Results
 
-These are from your latest `window=64`, `throttle=0` experiments on Feb 24, 2026.
+Experiment results from device folders `C3_iiot_energy`, `C3_iot_energy`, `S3_IIoT_energy`, `S3_IoT_energy`, `P4_IIoT`, `P4_IoT`, and `p4_BNN`. All runs use bitpack transport, host StandardScaler, and `unsafe_no_data_checksum` for throughput.
 
-| Model | Train Time (s) | Train Throughput (smp/s) | Final Train Acc | Test Time (s) | Final Test Acc | Avg Throughput (smp/s) |
-|---|---:|---:|---:|---:|---:|---:|
-| EFDT | 40.840 | 2034.0 | 93.74% | 9.719 | 96.85% | 2053.8 |
-| HAT | 39.288 | 2114.4 | 91.16% | 9.692 | 97.59% | 2120.0 |
-| HOEFFDING | 39.590 | 2098.3 | 91.04% | 9.716 | 97.68% | 2106.0 |
+### ESP32-C3 | UKMNCT_IIoT_FDIA (C3_iiot_energy)
 
-### Quick interpretation
+| Model | Train Throughput (smp/s) | Test Throughput (smp/s) | Train Time (s) | Test Time (s) | Energy Train (µJ/smp) | Energy Test (µJ/smp) | ms/sample (test) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| EFDT | 567 | 13,745 | 21.78 | 0.22 | 169.67 | 5.61 | 0.073 |
+| TM_BO / TM_SPARSE | 3,811 | 9,378 | 3.24 | 0.33 | 25.40 | 6.19 | 0.107 |
+| TM_VANILLA | 2,067 | 3,805 | 5.97 | 0.81 | 49.05 | 24.85 | 0.263 |
+| BNN | 68 | 1,049 | 182.56 | 2.94 | 1,439.0 | 93.48 | 0.953 |
 
-- **Best test accuracy** in this batch: **HOEFFDING (97.68%)**.
-- **Fastest overall throughput** in this batch: **HAT (2120 smp/s avg)**.
-- EFDT works well, but is slightly slower and lower accuracy in this run set.
-- SGT is implemented but not included in these attached `results/` files.
+### ESP32-C3 | IoT_clean (C3_iot_energy)
+
+| Model | Train Throughput (smp/s) | Test Throughput (smp/s) | Train Time (s) | Test Time (s) | Energy Train (µJ/smp) | Energy Test (µJ/smp) | ms/sample (test) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| TM_BO / TM_SPARSE | 4,045 | 11,336 | 20.54 | 1.83 | 25.29 | 8.17 | 0.088 |
+| TM_VANILLA | 2,778 | 5,083 | 29.90 | 4.09 | 36.92 | 19.47 | 0.197 |
+| BNN | 79 | 1,092 | 1,052.2 | 19.02 | 1,233.7 | 89.76 | 0.916 |
+
+### ESP32-S3 | UKMNCT_IIoT_FDIA (S3_IIoT_energy)
+
+| Model | Train Throughput (smp/s) | Test Throughput (smp/s) | Train Time (s) | Test Time (s) | Energy Train (µJ/smp) | Energy Test (µJ/smp) | ms/sample (test) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| HOEFFDING | 8,519 | 31,120 | 1.45 | 0.10 | 26.94 | — | 0.032 |
+| HAT | 6,225 | 30,549 | 1.98 | 0.10 | 36.75 | — | 0.033 |
+| EFDT | 3,969 | 30,695 | 3.11 | 0.10 | 58.14 | — | 0.033 |
+| TM_BO / TM_SPARSE | 7,570 | 20,261 | 32.60 | 3.05 | 31.75 | — | 0.049 |
+| TM_VANILLA | 3,325 | 8,458 | 74.23 | 7.30 | 70.07 | 16.49 | 0.118 |
+| BNN | 1,030 | 4,494 | 239.71 | 13.73 | 218.15 | 43.36 | 0.222 |
+
+### ESP32-S3 | IoT_clean (S3_IoT_energy)
+
+| Model | Train Throughput (smp/s) | Test Throughput (smp/s) | Train Time (s) | Test Time (s) | Energy Train (µJ/smp) | Energy Test (µJ/smp) | ms/sample (test) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| HOEFFDING | 5,243 | 36,908 | 15.84 | 0.56 | 46.61 | 4.62 | 0.027 |
+| HAT | 5,142 | 37,199 | 16.15 | 0.56 | 45.96 | 4.66 | 0.027 |
+| EFDT | 2,087 | 37,000 | 39.81 | 0.56 | 110.06 | 4.39 | 0.027 |
+| TM_BO / TM_SPARSE | 7,161 | 21,402 | 232.02 | 19.40 | 34.98 | 12.63 | 0.047 |
+| TM_VANILLA | 5,251 | 10,697 | 316.42 | 38.83 | 46.29 | 21.91 | 0.093 |
+| BNN | 1,144 | 4,778 | 1,452.9 | 86.94 | 196.77 | 48.69 | 0.209 |
+
+### ESP32-P4 | UKMNCT_IIoT_FDIA (P4_IIoT)
+
+| Model | Train Throughput (smp/s) | Test Throughput (smp/s) | Train Time (s) | Test Time (s) | Energy Train (µJ/smp) | Energy Test (µJ/smp) | ms/sample (test) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| HOEFFDING | 11,632 | 36,788 | 1.06 | 0.08 | — | — | 0.027 |
+| HAT | 11,667 | 37,166 | 1.06 | 0.08 | — | — | 0.027 |
+| EFDT | 7,281 | 37,755 | 1.69 | 0.08 | — | — | 0.026 |
+| TM_BO / TM_SPARSE | 14,327 | 30,051 | 17.45 | 2.07 | — | — | 0.033 |
+| TM_VANILLA | 6,649 | 15,255 | 37.12 | 4.04 | — | — | 0.066 |
+| BNN | 1,836 | 9,659 | 134.39 | 6.39 | — | — | 0.104 |
+
+### ESP32-P4 | IoT_clean (P4_IoT)
+
+| Model | Train Throughput (smp/s) | Test Throughput (smp/s) | Train Time (s) | Test Time (s) | Energy Train (µJ/smp) | Energy Test (µJ/smp) | ms/sample (test) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| HOEFFDING | 10,133 | 38,899 | 8.20 | 0.53 | — | — | 0.026 |
+| HAT | 7,222 | 39,137 | 11.50 | 0.53 | — | — | 0.026 |
+| EFDT | 2,667 | 38,831 | 31.14 | 0.53 | — | — | 0.026 |
+| TM_BO / TM_SPARSE | 13,968 | 36,973 | 120.52 | 11.31 | — | — | 0.027 |
+| TM_VANILLA | 8,924 | 19,009 | 186.17 | 21.85 | — | — | 0.053 |
+
+### ESP32-P4 | IoT_clean | BNN only (p4_BNN)
+
+| Model | Train Throughput (smp/s) | Test Throughput (smp/s) | Train Time (s) | Test Time (s) | Energy Train (µJ/smp) | Energy Test (µJ/smp) | ms/sample (test) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| BNN | 2,055 | 10,269 | 404.18 | 20.22 | — | — | 0.097 |
+
+*Note: Energy columns show `—` where Joulescope (`--js-power`) was not used. C3/S3 energy folders used Joulescope; P4 folders did not.*
 
 ---
 
@@ -134,11 +191,21 @@ For your current CSV + `--input-real` pipeline, each sample payload is:
 - Re-evaluates existing splits periodically and can replace weaker splits.
 - More adaptive than plain Hoeffding, usually with extra compute cost.
 
-### 4) SGT (Streaming Gradient Tree)
+### 4) TM_BO / TM_SPARSE (Tsetlin Machine)
 
-- Gradient-based streaming tree (uses gradient/hessian style updates).
-- Optimizes split gain with regularization terms (`lambda`, `gamma`).
-- Often very fast; accuracy depends heavily on data and tuning.
+- Tsetlin Machine for streaming classification.
+- TM_BO and TM_SPARSE use the same implementation with sparse clauses.
+- Boolean inputs, clause-based inference; low energy per sample.
+
+### 5) TM_VANILLA (Tsetlin Machine)
+
+- Standard Tsetlin Machine variant.
+- Higher compute per sample than TM_BO/TM_SPARSE.
+
+### 6) BNN (Binary Neural Network)
+
+- Binary neural network for on-device streaming learning.
+- Multi-epoch training; higher energy per sample than tree models.
 
 ---
 
@@ -156,8 +223,10 @@ Options:
 #define MODEL_TYPE MODEL_EFDT
 #define MODEL_TYPE MODEL_HOEFFDING
 #define MODEL_TYPE MODEL_HAT
-#define MODEL_TYPE MODEL_SGT
 #define MODEL_TYPE MODEL_BNN
+#define MODEL_TYPE MODEL_TM_SPARSE
+#define MODEL_TYPE MODEL_TM_VANILLA
+#define MODEL_TYPE MODEL_TM_BO
 ```
 
 Then rebuild and upload.
@@ -194,7 +263,7 @@ python3 run_all_models.py --models ALL --transport bitpack \
 **Flag explanations:**
 | Flag | Meaning |
 |------|---------|
-| `--models ALL` | Run all models (EFDT, HOEFFDING, HAT, SGT, BNN, TM_SPARSE, TM_VANILLA, TM_BO) |
+| `--models ALL` | Run all models (EFDT, HOEFFDING, HAT, BNN, TM_SPARSE, TM_VANILLA, TM_BO) |
 | `--transport bitpack` | Use bit-packed binary transport |
 | `-p /dev/cu.usbserial-0001` | Serial port (built-in USB on P4-NANO) |
 | `-b 921600` | Baud rate |
