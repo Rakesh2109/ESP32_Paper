@@ -1,0 +1,189 @@
+Dataset: IoT_clean.csv
+Train size: 83071, Test size: 20768
+Classes: 2
+
+Training Hoeffding Tree (normalized)...
+  10000/83071 samples processed
+  20000/83071 samples processed
+  30000/83071 samples processed
+  40000/83071 samples processed
+  50000/83071 samples processed
+  60000/83071 samples processed
+  70000/83071 samples processed
+  80000/83071 samples processed
+  Done training Hoeffding Tree (normalized).
+
+Hoeffding Tree [WITH normalization] — Test Accuracy: 0.9224
+              precision    recall  f1-score   support
+
+           0       0.99      0.88      0.93     12613
+           1       0.84      0.99      0.91      8155
+
+    accuracy                           0.92     20768
+   macro avg       0.92      0.93      0.92     20768
+weighted avg       0.93      0.92      0.92     20768
+
+
+Training EFDT (normalized)...
+  10000/83071 samples processed
+  20000/83071 samples processed
+  30000/83071 samples processed
+  40000/83071 samples processed
+  50000/83071 samples processed
+  60000/83071 samples processed
+  70000/83071 samples processed
+  80000/83071 samples processed
+  Done training EFDT (normalized).
+
+EFDT [WITH normalization] — Test Accuracy: 0.9579
+              precision    recall  f1-score   support
+
+           0       1.00      0.93      0.96     12613
+           1       0.90      1.00      0.95      8155
+
+    accuracy                           0.96     20768
+   macro avg       0.95      0.96      0.96     20768
+weighted avg       0.96      0.96      0.96     20768
+
+
+Training Hoeffding Adaptive Tree (normalized)...
+  10000/83071 samples processed
+  20000/83071 samples processed
+  30000/83071 samples processed
+  40000/83071 samples processed
+  50000/83071 samples processed
+  60000/83071 samples processed
+  70000/83071 samples processed
+  80000/83071 samples processed
+  Done training Hoeffding Adaptive Tree (normalized).
+
+Hoeffding Adaptive Tree [WITH normalization] — Test Accuracy: 0.9435
+              precision    recall  f1-score   support
+
+           0       0.96      0.94      0.95     12613
+           1       0.91      0.95      0.93      8155
+
+    accuracy                           0.94     20768
+   macro avg       0.94      0.94      0.94     20768
+weighted avg       0.94      0.94      0.94     20768
+
+
+Training SGT (normalized)...
+  10000/83071 samples processed
+  20000/83071 samples processed
+  30000/83071 samples processed
+  40000/83071 samples processed
+  50000/83071 samples processed
+  60000/83071 samples processed
+  70000/83071 samples processed
+  80000/83071 samples processed
+  Done training SGT (normalized).
+
+SGT [WITH normalization] — Test Accuracy: 0.9730
+              precision    recall  f1-score   support
+
+           0       0.96      0.99      0.98     12613
+           1       0.99      0.94      0.96      8155
+
+    accuracy                           0.97     20768
+   macro avg       0.98      0.97      0.97     20768
+weighted avg       0.97      0.97      0.97     20768
+
+
+Training Hoeffding Tree (raw)...
+  10000/83071 samples processed
+  20000/83071 samples processed
+  30000/83071 samples processed
+  40000/83071 samples processed
+  50000/83071 samples processed
+  60000/83071 samples processed
+  70000/83071 samples processed
+  80000/83071 samples processed
+  Done training Hoeffding Tree (raw).
+
+Hoeffding Tree [WITHOUT normalization] — Test Accuracy: 0.9177
+              precision    recall  f1-score   support
+
+           0       0.95      0.91      0.93     12613
+           1       0.87      0.92      0.90      8155
+
+    accuracy                           0.92     20768
+   macro avg       0.91      0.92      0.91     20768
+weighted avg       0.92      0.92      0.92     20768
+
+
+Training EFDT (raw)...
+  10000/83071 samples processed
+  20000/83071 samples processed
+  30000/83071 samples processed
+  40000/83071 samples processed
+  50000/83071 samples processed
+  60000/83071 samples processed
+  70000/83071 samples processed
+  80000/83071 samples processed
+  Done training EFDT (raw).
+
+EFDT [WITHOUT normalization] — Test Accuracy: 0.9580
+              precision    recall  f1-score   support
+
+           0       1.00      0.93      0.96     12613
+           1       0.91      0.99      0.95      8155
+
+    accuracy                           0.96     20768
+   macro avg       0.95      0.96      0.96     20768
+weighted avg       0.96      0.96      0.96     20768
+
+
+Training Hoeffding Adaptive Tree (raw)...
+  10000/83071 samples processed
+  20000/83071 samples processed
+  30000/83071 samples processed
+  40000/83071 samples processed
+  50000/83071 samples processed
+  60000/83071 samples processed
+  70000/83071 samples processed
+  80000/83071 samples processed
+  Done training Hoeffding Adaptive Tree (raw).
+
+Hoeffding Adaptive Tree [WITHOUT normalization] — Test Accuracy: 0.9495
+              precision    recall  f1-score   support
+
+           0       0.98      0.93      0.96     12613
+           1       0.90      0.98      0.94      8155
+
+    accuracy                           0.95     20768
+   macro avg       0.94      0.95      0.95     20768
+weighted avg       0.95      0.95      0.95     20768
+
+
+Training SGT (raw)...
+  10000/83071 samples processed
+  20000/83071 samples processed
+  30000/83071 samples processed
+  40000/83071 samples processed
+  50000/83071 samples processed
+  60000/83071 samples processed
+  70000/83071 samples processed
+  80000/83071 samples processed
+  Done training SGT (raw).
+
+SGT [WITHOUT normalization] — Test Accuracy: 0.9675
+              precision    recall  f1-score   support
+
+           0       0.95      1.00      0.97     12613
+           1       0.99      0.92      0.96      8155
+
+    accuracy                           0.97     20768
+   macro avg       0.97      0.96      0.97     20768
+weighted avg       0.97      0.97      0.97     20768
+
+
+=======================================================
+SUMMARY — With vs Without Normalization (IoT_clean.csv)
+=======================================================
+Model                             With norm Without norm       Best
+-------------------------------------------------------
+Hoeffding Tree                       0.9224       0.9177 Normalized
+EFDT                                 0.9579       0.9580        Raw
+Hoeffding Adaptive Tree              0.9435       0.9495        Raw
+SGT                                  0.9730       0.9675 Normalized

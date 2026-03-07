@@ -1,0 +1,5 @@
+[wokwi]
+version = 1
+elf = ".pio/build/esp32_wokwi/firmware.elf"
+firmware = ".pio/build/esp32_wokwi/firmware.bin"
+rfc2217ServerPort = 4000
